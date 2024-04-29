@@ -8,7 +8,11 @@ import com.green.entity.Article;
 
 public interface ArticleRepository 
     extends CrudRepository<Article, Long> {
-
+	//extends CrudRepocitoty<Article, Long>
+	// JPA 의 crud 기능을 동작시키는 클래스
+	
+	// alt + shift + s :  override/Implement method 누르면 사용가능한 함수 목록 확인 가능
+	
 	@Override
 	ArrayList<Article> findAll();
 
