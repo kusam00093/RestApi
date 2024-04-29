@@ -51,6 +51,10 @@
 	<li><a href="/api/articles" id="post">article 새글 추가(Post)</a></li>
 	<li><a href="/api/articles" id="patch">article 글 수정(Patch)</a></li>
 	<li><a href="/api/articles" id="delete">article 글 삭제(Delete)</a></li>
+	<li>&nbsp;</li>
+	<li><a href="/api/transaction-test"  id="transact1">트랜젝션 테스트(오류 3개 저장)</a></li>
+	<li><a href="/api/transaction-test2"  id="transact2">트랜젝션 테스트(하나도 저장되지않음)</a></li>
+	
 	</ul>
 	
 	
@@ -233,6 +237,69 @@
 			                    break;
 			            }
 			        });
+					break;
+			// 실행화면 500에러 발생하면서 3개의 data가 전부 입력된다
+			// transaction 작동하지 않음
+			case 'transact1' :
+				params ={
+					method:'POST',
+					headers : {
+						"Accept" : "application/json",
+						"Content-Type" : "application/json",
+						"Access-Control-Origin" : "*"     //CORS 정책을 피한다
+					},
+					body : JSON.stringify([
+						 {title:"시간 예약"   ,content:"1240"},
+						 {title:"테이블 지정" ,content:"A12번"},
+						 {title:"메뉴선택"    ,content:"Branch A"}
+				
+				]),
+				}
+				fetch(aEl.href,params)
+					.then(response => response.json())
+					.then (json =>{
+						console.log(json);
+						outputEl.innerHTML = JSON.stringify(json);
+					
+					})
+					.catch(error =>{
+						console.dir(error)
+						alert("!!!!!!!!!!!!! 저장실패"+error)
+						
+					
+					});
+					
+					break;
+			// 데이터 하나도 저장 안됨		
+			case 'transact2' :
+				params ={
+					method:'POST',
+					headers : {
+						"Accept" : "application/json",
+						"Content-Type" : "application/json",
+						"Access-Control-Origin" : "*"     //CORS 정책을 피한다
+					},
+					body : JSON.stringify([
+						 {title:"시간 예약"   ,content:"1240"},
+						 {title:"테이블 지정" ,content:"A12번"},
+						 {title:"메뉴선택"    ,content:"Branch A"}
+				
+				]),
+				}
+				fetch(aEl.href,params)
+					.then(response => response.json())
+					.then (json =>{
+						console.log(json);
+						outputEl.innerHTML = JSON.stringify(json);
+					
+					})
+					.catch(error =>{
+						console.dir(error)
+						alert("!!!!!!!!!!!!! 저장실패"+error)
+						
+					
+					});
+					
 					break;
 			}
 		}
