@@ -33,7 +33,8 @@ public class Article {
 	@Column
 	private  String  content;
 	
-	// 생성자
+	// 자바에 사용하기위해 만든 내용들
+	// 생성자(@AllargsConstructor)
 	public Article(Long id, String title, String content) {		
 		this.id = id;
 		this.title = title;
