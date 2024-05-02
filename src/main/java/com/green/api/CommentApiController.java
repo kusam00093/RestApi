@@ -56,7 +56,7 @@ public class CommentApiController {
 		
 		CommentDto createdDto = commentService.create(articleId, dto);
 		// 결과 응답
-		return ResponseEntity.status(HttpStatus.OK).body(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(createdDto);
 	}
 	//3. 댓글 수정(PATCH)
 	//http://localhost:9090/api/comments/10

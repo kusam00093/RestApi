@@ -18,19 +18,19 @@ public class HomeController {
 	
 	@GetMapping("/hi2") 
 	public  String   hi2( Model model ) {
-		model.addAttribute("username", "원영이" );
+		model.addAttribute("username", "페이커" );
 		return "greetings2"; // greetings2.mustache
 	}
 		
 	@GetMapping("/hi3") 
 	public  String   hi3( Model model ) {
-		model.addAttribute("username", "태훈이" );
+		model.addAttribute("username", "페이커" );
 		return "greetings3"; // greetings2.mustache
 	}
 	
 	@GetMapping("/hi4") 
 	public  String   hi4( Model model ) {
-		model.addAttribute("username", "태훈이" );
+		model.addAttribute("username", "페이커" );
 		return "greetings4"; // greetings2.mustache
 	}
 	

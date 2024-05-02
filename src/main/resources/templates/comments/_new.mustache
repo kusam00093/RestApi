@@ -1,0 +1,62 @@
+<div class="card m-2" id="comments=new">
+	<div class="card-body">
+	<!-- 댓글 작성 폼 -->
+	<form>
+		<!-- 히든정보 -->
+		<input type="hidden" value="{{id}}" id="now-comment-id">
+		<!-- 닉네임 -->
+		<div class="mb-3">
+			<label class="form-label">  닉네임</label>
+			<label>
+				<input type="text" class="form-control" id="new-comment-nickname">
+			</label>
+		</div>
+		<!-- 댓글 본문 -->
+		<div class="mb-3">
+			<label class="form-label">댓글 내용</label>
+			<label>
+				<textarea type="text" rows="3" class="form-control" id="new-comment-body"></textarea>
+			</label>
+		
+		</div>
+		<!-- 전송버튼 -->
+		<button type="button" class="btn btn-primary" id="comment-create-btn">작성</button>
+	
+	</form>	
+	</div>
+</div>
+<!-- 새글 쓰기 -->
+<script>
+	const commentCreateBtnEl = document.querySelector('#comment-create-btn');
+	commentCreateBtnEl.addEventListener('click',()=>{
+		let url = 'http://localhost:9090/api/articles/{{id}}/comments';
+		const comment ={
+			// 새 댓글의 nickname
+			nickname : document.querySelector('#new-comment-nickname').value,
+			// 새 댓글의 본문
+			body : document.querySelector('#new-comment-body').value,
+			// 부모게시글의 id
+			articleId : document.querySelector('#new-comment-id')
+		};
+		
+		const params ={
+			method : 'POST',
+			headers : {"Content-Type" : "application/json"},
+			body   : JSON.stringify(comment)
+		
+		};
+		fetch(url,params)
+			.then((response)=>{
+				const msg =(response.ok) ? '댓글이 등록되었습니다'
+										 : '댓글이 저장되지 않았습니다';
+					alert(msg);
+					// 현재 페이지 새로 고침
+					//window.location.reload();
+			})
+			.catch((error)=>alert(error))
+	})
+</script>
+
+
+
+
