@@ -6,8 +6,17 @@
 	<h5 class="card-header">
 	{{nickname}}
 	&nbsp;&nbsp;&nbsp;
-	<button class="btn btn-sm btn-outline-primary">수정</button>
-	<button class="btn btn-sm btn-outline-danger comment-delete-btn">삭제</button>({{id}},{{articleId}})
+	<!-- Button trigger modal -->
+	<button type="button"
+	data-bs-toggle="modal"
+	data-bs-target="#exampleModal"
+	data-bs-id="{{id}}"
+	data-bs-nickname="{{nickname}}"
+	data-bs-body="{{body}}"
+	data-bs-article-id="{{articleId}}"
+	class="btn btn-sm btn-outline-primary">수정</button>
+	<!-- 댓글 삭제 버튼 -->
+	<button class="btn btn-sm btn-outline-danger comment-delete-btn" name="delete">삭제</button>({{id}},{{articleId}})
 	</h5>
 	<div class="card-body">
 	{{body}}
@@ -15,3 +24,146 @@
 </div>
 	{{/commentDtos}}
 </div>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">댓글 수정</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- 수정화면 -->
+      <div class="modal-body">
+	      <!-- 댓글 수정 폼 -->
+        <form>
+	      <!-- 댓글 id, article_id 둘다 hidden으로 전송 -->
+	      <input type="hidden" id="edit-comment-id">
+	      <input type="hidden" id="edit-comment-article-id" >
+		  
+	      <!-- 닉네임 -->
+	      <div class="mb-3">
+	      	<label class="form-label">닉네임</label>
+	      	<input type="text" class="form-control" id="edit-comment-nickname" >
+	      </div>
+	      <!-- 댓글 본문 -->
+	      <div class="mb-3">
+	      	<label class="form-label">댓글 본문</label>
+			<textarea rows="3" class="form-control" id="edit-comment-body" type="text"></textarea>
+	      </div>
+        </form>
+      </div>
+	      <!-- 댓글 전송버튼 -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="comment-update-btn">수정 완료</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+	      <!-- 모달 이벤트 처리(다이얼로그가 화면 나타날때 해야할 일) -->
+</div>
+	<script>
+// 	// 모달 창을 찾는다
+// 	const commentEditModal = document.querySelector('#comment-update-btn');
+// 	// 이벤트 연결 : show.bs.modal - modal  화면이 그려지기전
+
+
+
+
+	const commentEditModal = document.querySelector('#exampleModal');
+	// 이벤트 연결: show.bs.modal - modal 화면이 그려지기전
+		commentEditModal.addEventListener('shown.bs.modal',(event)=>{
+
+		//console.dir(event);
+		//1. 트리거 버튼 실행
+		const triggerBtn = event.relatedTarget;
+		//console.dir(triggerBtn);
+		// 2. 데이터 가져오기
+		let id         = triggerBtn.getAttribute("data-bs-id");
+		let nickname   = triggerBtn.getAttribute("data-bs-nickname");
+		let articleId  = triggerBtn.getAttribute("data-bs-article-id");
+		let body       = triggerBtn.getAttribute("data-bs-body");
+		let cmt        =`id:${id},
+						nickname:${nickname},
+						body:${body},
+						articleId:${articleId}`
+		//alert(cmt);
+		// 3. 수정폼에 데이터 집어넣기
+		document.querySelector('#edit-comment-nickname').value = nickname;
+		document.querySelector('#edit-comment-body').value = body;
+		document.querySelector('#edit-comment-article-id').value = articleId;
+		document.querySelector('#edit-comment-id').value = id;
+		
+	})
+
+	</script>	     
+	<script>
+	const editbtnEl = document.querySelector('#comment-update-btn'); 
+	editbtnEl.addEventListener('click',()=>{
+	const	nickname  = document.querySelector('#edit-comment-nickname').value;
+		// 새 댓글의 본문
+	const	body      = document.getElementById('edit-comment-body').value;
+	const	id        = document.getElementById('edit-comment-id').value;
+		// 부모게시글의 id
+	const	articleId = document.getElementById('edit-comment-article-id').value;
+		//alert('shown.bs.modal');
+		const comment ={
+				// 새 댓글의 nickname
+				nickname  :nickname,
+				// 새 댓글의 본문
+				body      : body,
+				id        : id,
+				// 부모게시글의 id
+				article_id : articleId
+			};
+		let url = 'http://localhost:9090/api/comments/'+id;
+		const params ={
+
+			method : 'PATCH',
+			headers : {"Content-Type" : "application/json"},
+			body   : JSON.stringify(comment)
+		
+		};
+		fetch(url,params)
+		.then((response)=>{
+			const msg =(response.ok) ? '댓글이 수정되었습니다'
+									 : '댓글이 수정되지 않았습니다';
+				alert(msg);
+				//alert(id);
+				// 1. 전체  페이지 새로 고침
+				window.location.reload();
+				// 2. Get 댓글만 조회 -> 결과를 JSON 
+				//-> HTML 로 변경 한 후 <div id="comments-list"> 변경 내용을 수정
+				
+		})
+		.catch((error)=>alert(error))
+	})
+	      <!-- 댓글수정 -->
+	</script>	 
+	<script>
+	      <!-- 댓글 삭제 -->
+	      const deleteEls = document.getElementsByName('delete');
+	      deleteEls.forEach(deleteEl => {
+	          deleteEl.addEventListener('click', () => {
+	        		const	id        = document.getElementById('edit-comment-id').value;
+	              alert(id);
+	              const comment = {
+	                  id: id
+	              };
+	              const params = {
+	                  method: 'DELETE',
+	                  headers: { "Content-Type": "application/json" },
+	                  body: JSON.stringify(comment)
+	              };
+	              let url = 'http://localhost:9090/api/comments/' + id;
+	              fetch(url, params)
+	                  .then((response) => {
+	                      const msg = (response.ok) ? '댓글이 삭제되었습니다' : '댓글 삭제가 불가합니다';
+	                      alert(msg);
+	                      window.location.reload();
+	                  })
+	                  .catch((error) => alert(error))
+	          });
+	      });
+	</script>	      
+      

@@ -3,7 +3,9 @@
 	<!-- 댓글 작성 폼 -->
 	<form>
 		<!-- 히든정보 -->
-		<input type="hidden" value="{{id}}" id="now-comment-id">
+		{{#article}}
+		<input type="hidden" value="{{id}}" id="new-comment-id">
+		{{/article}}
 		<!-- 닉네임 -->
 		<div class="mb-3">
 			<label class="form-label">  닉네임</label>
@@ -29,6 +31,7 @@
 <script>
 	const commentCreateBtnEl = document.querySelector('#comment-create-btn');
 	commentCreateBtnEl.addEventListener('click',()=>{
+		// {{id}} : Controller의 PathVariable - mustache파일에서도 사용가능하다
 		let url = 'http://localhost:9090/api/articles/{{id}}/comments';
 		const comment ={
 			// 새 댓글의 nickname
@@ -36,7 +39,7 @@
 			// 새 댓글의 본문
 			body : document.querySelector('#new-comment-body').value,
 			// 부모게시글의 id
-			articleId : document.querySelector('#new-comment-id')
+			article_id : document.querySelector('#new-comment-id').value
 		};
 		
 		const params ={
@@ -51,7 +54,7 @@
 										 : '댓글이 저장되지 않았습니다';
 					alert(msg);
 					// 현재 페이지 새로 고침
-					//window.location.reload();
+					window.location.reload();
 			})
 			.catch((error)=>alert(error))
 	})

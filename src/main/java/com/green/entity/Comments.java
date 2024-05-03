@@ -58,6 +58,8 @@ public class Comments {
 
 	public void patch(CommentDto dto) {
 		if(this.id  != dto.getId()) {
+			System.out.println(";asdjghflkasdhflkja"+this.id);
+			System.out.println(";asdjghflkasdhflkja"+dto.getId());
 			throw new IllegalArgumentException("댓글 수정 실패!! 잘못된 아이디가 입력되었습니다");
 			
 		}

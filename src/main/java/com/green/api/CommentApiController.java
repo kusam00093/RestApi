@@ -52,7 +52,7 @@ public class CommentApiController {
 	@PostMapping("/api/articles/{articleId}/comments")
 	public ResponseEntity<CommentDto> create(
 			@PathVariable Long articleId,       // {articleId} : 게시글 번호
-			@RequestBody CommentDto dto){		// 입력된 자료들 input, select
+			@RequestBody CommentDto dto){		// 입력된 자료들 input, select : js fetch boby :{}
 		
 		CommentDto createdDto = commentService.create(articleId, dto);
 		// 결과 응답
